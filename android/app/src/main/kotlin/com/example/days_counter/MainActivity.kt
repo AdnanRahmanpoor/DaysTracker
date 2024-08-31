@@ -1,4 +1,4 @@
-package com.example.days_counter
+package com.example.DaysTracker
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "days_counter" "\0"
+            VALUE "FileDescription", "DaysTracker" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "days_counter" "\0"
+            VALUE "InternalName", "DaysTracker" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "days_counter.exe" "\0"
-            VALUE "ProductName", "days_counter" "\0"
+            VALUE "OriginalFilename", "DaysTracker.exe" "\0"
+            VALUE "ProductName", "DaysTracker" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

@@ -37,7 +37,9 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: _isDarkMode ? ThemeManager.getDarkTheme() : ThemeManager.getLightTheme(),
+      theme: _isDarkMode
+          ? ThemeManager.getDarkTheme()
+          : ThemeManager.getLightTheme(),
       home: HomePage(
         isDarkMode: _isDarkMode,
         onThemeChanged: _toggleTheme,
@@ -70,7 +72,13 @@ class _HomePageState extends State<HomePage> {
     setState(() {});
   }
 
-  void _addEntry(DateEntry entry) {
+  void _addEntry(Map<String, dynamic> data) {
+    final DateEntry entry = DateEntry(
+      date: data['selectedDate'],
+      title: data['title'],
+      displayOption: data['displayOption'],
+    );
+
     setState(() {
       dateEntries.add(entry);
     });
@@ -91,7 +99,8 @@ class _HomePageState extends State<HomePage> {
         title: Text('Days Tracker'),
         actions: [
           IconButton(
-            icon: Icon(widget.isDarkMode ? Icons.wb_sunny : Icons.nightlight_round),
+            icon: Icon(
+                widget.isDarkMode ? Icons.wb_sunny : Icons.nightlight_round),
             onPressed: () {
               widget.onThemeChanged(!widget.isDarkMode);
             },
@@ -105,9 +114,19 @@ class _HomePageState extends State<HomePage> {
           final now = DateTime.now();
           final difference = dateEntry.date.difference(now).inDays;
           final isFuture = difference >= 0;
-          final displayText = isFuture
-              ? '$difference days until ${dateEntry.date.toLocal().toString().split(' ')[0]}'
-              : '${-difference} days since ${dateEntry.date.toLocal().toString().split(' ')[0]}';
+          final displayText = dateEntry.displayOption == "Date"
+              ? (isFuture
+                  ? '$difference days until ${dateEntry.date.toLocal().toString().split(' ')[0]}'
+                  : '${-difference} days since ${dateEntry.date.toLocal().toString().split(' ')[0]}')
+              : dateEntry.displayOption == "Title"
+                  ? (isFuture
+                      ? '$difference days until ${dateEntry.title}'
+                      : '${-difference} days since ${dateEntry.title}')
+                    :dateEntry.displayOption == "Both"
+                      ? (isFuture
+                      ? '$difference days until ${dateEntry.title} (${dateEntry.date.toLocal().toString().split(" ")[0]})'
+                      : '${-difference} days since ${dateEntry.title} (${dateEntry.date.toLocal().toString().split(' ')[0]})')
+                      : ''; // fallback instead no option is matched
 
           return Card(
             child: ListTile(
@@ -122,12 +141,12 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final pickedDate = await Navigator.push(
+          final result = await Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => DatePickerPage()),
           );
-          if (pickedDate != null) {
-            _addEntry(DateEntry(date: pickedDate));
+          if (result != null) {
+            _addEntry(result);
           }
         },
         child: Icon(Icons.add),

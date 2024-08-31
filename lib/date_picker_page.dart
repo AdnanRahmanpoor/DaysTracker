@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 
-
 class DatePickerPage extends StatefulWidget {
   @override
   DatePickerPageState createState() => DatePickerPageState();
 }
 
 class DatePickerPageState extends State<DatePickerPage> {
-    DateTime selectedDate = DateTime.now();
+  DateTime selectedDate = DateTime.now();
+  String title = "";
+  String displayOption = "Both"; // Options: "Date", "Title", "Both"
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Pick a Date'),
@@ -19,6 +20,18 @@ class DatePickerPageState extends State<DatePickerPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            SizedBox(
+              width: 250,
+              child: TextField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Title',
+                ),
+                onChanged: (value) {
+                  title = value;
+                },
+              ),
+            ),
             ElevatedButton(
               onPressed: () async {
                 final DateTime? picked = await showDatePicker(
@@ -31,7 +44,8 @@ class DatePickerPageState extends State<DatePickerPage> {
                   setState(() {
                     selectedDate = picked;
                   });
-                }},
+                }
+              },
               child: Text('Select date'),
             ),
             if (selectedDate != null)
@@ -42,9 +56,27 @@ class DatePickerPageState extends State<DatePickerPage> {
                   style: TextStyle(fontSize: 18),
                 ),
               ),
+            DropdownButton<String>(
+              value: displayOption,
+              items: <String>['Date', 'Title', 'Both'].map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  displayOption = newValue!;
+                });
+              },
+            ),
             ElevatedButton(
               onPressed: () {
-                Navigator.pop(context, selectedDate);
+                Navigator.pop(context, {
+                  'selectedDate': selectedDate,
+                  'title': title,
+                  'displayOption': displayOption,
+                });
               },
               child: Text('Submit'),
             ),

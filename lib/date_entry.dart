@@ -3,15 +3,22 @@ import 'dart:convert';
 
 class DateEntry {
   DateTime date;
+  String title;
+  String displayOption;
 
-  DateEntry({required this.date});
+  DateEntry({required this.date, required this.title, required this.displayOption});
 
   Map<String, dynamic> toJson() => {
         'date': date.toIso8601String(),
+        'title': title,
+        'displayOption': displayOption,
       };
 
   factory DateEntry.fromJson(Map<String, dynamic> json) {
-    return DateEntry(date: DateTime.parse(json['date']));
+    return DateEntry(
+        date: DateTime.parse(json['date']),
+        title: json['title'],
+        displayOption: json['displayOption']);
   }
 }
 
